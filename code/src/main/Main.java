@@ -11,18 +11,20 @@ public class Main {
 //        matrix.delete(5, 4);
 //        matrix.search(9);
 //        matrix.update(3, 3, 1);
-        matrix.show_zip();
+//        matrix.show_2d();
+
     }
 
     static matrix read_matrix() throws IOException {
-        FileReader fin = new FileReader("M(10,5).csv");
+        FileReader fin = new FileReader("M(300,200).csv");
         Scanner sc = new Scanner(fin);
         ArrayList<node> nodes = new ArrayList<node>();
         node node2 = null;
         int j = -1;
+        int o = 0;
         while (sc.hasNext()) {
             String[] arr = sc.nextLine().split(",");
-
+            o = arr.length;
             if (j == nodes.size()) {
                 node2 = new node(-2, -2, null);
                 nodes.add(node2);
@@ -49,7 +51,7 @@ public class Main {
         }
         nodes.get(nodes.size() - 1).pointer = null;
         fin.close();
-        return new matrix(nodes);
+        return new matrix(nodes, nodes.size(), o);
     }
 
 
@@ -68,10 +70,13 @@ class node {
 }
 
 class matrix {
-    ArrayList<node> nodes = new ArrayList();
+    ArrayList<node> nodes;
+    int row, col;
 
-    public matrix(ArrayList<node> nodes) {
+    public matrix(ArrayList<node> nodes, int row, int col) {
         this.nodes = nodes;
+        this.row = row;
+        this.col = col;
     }
 
     void insert(int row, int col, int value) {
@@ -157,6 +162,22 @@ class matrix {
     }
 
     void show_2d() {
+        int[][] matrix = new int[row][col];
+        node a;
+        for (int i = 0; i < row; i++) {
+            a = nodes.get(i);
+            for (int j = 0; j < col; j++) {
+                if (a.index == j) {
+                    matrix[i][j] = a.value;
+                    System.out.print(a.value+",");
+                    if (a.pointer != null)
+                        a = a.pointer;
+                } else
+                    matrix[i][j] = 0;
+                System.out.print(0 + ",");
+            }
+            System.out.println();
+        }
 
     }
 
@@ -173,4 +194,5 @@ class matrix {
             i++;
         }
     }
+
 }
