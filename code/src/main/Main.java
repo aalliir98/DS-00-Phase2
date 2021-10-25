@@ -7,10 +7,12 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         matrix matrix = read_matrix();
+     matrix.insert(3, 2, 90);
+        matrix.delete(5, 4);
     }
 
     static matrix read_matrix() throws IOException {
-        FileReader fin = new FileReader("./M(300,200).csv");
+        FileReader fin = new FileReader("M(10,5).csv");
         Scanner sc = new Scanner(fin);
         ArrayList<node> nodes = new ArrayList<node>();
         node node2 = null;
@@ -62,18 +64,59 @@ class node {
 }
 
 class matrix {
-    ArrayList nodes = new ArrayList();
+    ArrayList<node> nodes = new ArrayList();
 
-    public matrix(ArrayList nodes) {
+    public matrix(ArrayList<node> nodes) {
         this.nodes = nodes;
     }
 
     void insert(int row, int col, int value) {
+        node node1 = nodes.get(row);
+        node node2 = new node(col, value, node1.pointer);
+        while (true) {
+            if (node1.pointer == null) {
+                nodes.remove(node1);
+                nodes.add(row, node2);
+                break;
+            }
+            if (node1.pointer.index > col && node1.index < col) {
+                node1.pointer = node2;
+                break;
+            }
+            node1 = node1.pointer;
+        }
 
     }
 
     void delete(int row, int col) {
+        node node1 = null;
+        node node2 = nodes.get(row);
+        boolean a = true;
+        if (node2.pointer == null && node2.index == col) {
+            node2.index = -2;
+            node2.value = -2;
+            a = false;
+        }
+        if (a)
+            while (true) {
+                if (node2.index == col && node2.pointer != null) {
+                    if (node1 != null) {
+                        node1.pointer = node2.pointer;
+                        break;
+                    } else {
+                        nodes.add(row, node2.pointer);
+                        nodes.remove(node2);
+                        break;
+                    }
+                }
+                if (node2.index == col && node2.pointer == null) {
+                    node1.pointer = null;
+                    break;
+                }
 
+                node1 = node2;
+                node2 = node2.pointer;
+            }
     }
 
     void search(int value) {

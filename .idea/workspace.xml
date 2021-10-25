@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f7cb88a7-952f-4891-8a88-cdbd66b96a12" name="Default Changelist" comment="">
+    <list default="true" id="08ab2afd-4efb-424f-a0c5-5b4b4abffdd0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/code/src/main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/code/src/main/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phase2-AliRostaminia/main/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phase2-AliRostaminia/main/matrix.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/phase2-AliRostaminia/main/node.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/phase2-AliRostaminia.iml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -12,7 +17,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectId" id="1zwdueVg1sFyeANfKrn03VjfzSY" />
+  <component name="ProjectId" id="1zyCNuuuAv5P1jDXUSqqGNTVAQw" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -22,25 +27,9 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/code/src/main/lib/opencsv-4.1.jar" />
-    <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/code" />
   </component>
   <component name="RunManager">
-    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="main.Main" />
-      <module name="phase2-AliRostaminia" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="main.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
@@ -52,38 +41,20 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.Main" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="f7cb88a7-952f-4891-8a88-cdbd66b96a12" name="Default Changelist" comment="" />
-      <created>1635063307280</created>
+      <changelist id="08ab2afd-4efb-424f-a0c5-5b4b4abffdd0" name="Default Changelist" comment="" />
+      <created>1635110903440</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1635063307280</updated>
-      <workItem from="1635063309702" duration="16624000" />
+      <updated>1635110903440</updated>
+      <workItem from="1635110905366" duration="119000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="XDebuggerManager">
-    <pin-to-top-manager>
-      <pinned-members>
-        <PinnedItemInfo parentTag="main.matrix" memberName="nodes" />
-      </pinned-members>
-    </pin-to-top-manager>
-    <watches-manager>
-      <configuration name="Application">
-        <watch expression="nodes.get(3)" />
-        <watch expression="nodes.get(3)" language="JAVA" />
-      </configuration>
-    </watches-manager>
   </component>
 </project>
