@@ -7,8 +7,11 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         matrix matrix = read_matrix();
-     matrix.insert(3, 2, 90);
-        matrix.delete(5, 4);
+//        matrix.insert(3, 2, 90);
+//        matrix.delete(5, 4);
+//        matrix.search(9);
+//        matrix.update(3, 3, 1);
+        matrix.show_zip();
     }
 
     static matrix read_matrix() throws IOException {
@@ -45,6 +48,7 @@ public class Main {
                 }
         }
         nodes.get(nodes.size() - 1).pointer = null;
+        fin.close();
         return new matrix(nodes);
     }
 
@@ -120,15 +124,36 @@ class matrix {
     }
 
     void search(int value) {
+        boolean u = false;
+        for (node a : nodes) {
+            while (true) {
+                if (a.value == value) {
+                    u = true;
+                    System.out.println(u);
+                    break;
+                }
+                node b = a;
+                a = a.pointer;
+                if (b.pointer == null)
+                    break;
+            }
+            if (u)
+                break;
+        }
+        if (!u)
+            System.out.println(u);
 
     }
 
     void update(int row, int col, int value) {
-
-    }
-
-    void print(boolean type) {
-
+        node node1 = nodes.get(row);
+        while (true) {
+            if (node1.index == col) {
+                node1.value = value;
+                break;
+            }
+            node1 = node1.pointer;
+        }
     }
 
     void show_2d() {
@@ -136,6 +161,16 @@ class matrix {
     }
 
     void show_zip() {
-
+        int i = 0;
+        for (node a : nodes) {
+            while (true) {
+                if (a.index != -2)
+                    System.out.println(i + " " + a.index + " " + a.value);
+                if (a.pointer == null)
+                    break;
+                a = a.pointer;
+            }
+            i++;
+        }
     }
 }
