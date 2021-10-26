@@ -3,20 +3,56 @@ package main;
 import java.io.*;
 import java.util.*;
 
+import com.opencsv.*;
+
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        matrix matrix = read_matrix();
-//        matrix.insert(3, 2, 90);
-//        matrix.delete(5, 4);
-//        matrix.search(9);
-//        matrix.update(3, 3, 1);
-//        matrix.show_2d();
+        int p = 0;
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter file name:");
+        String file_name = sc.next();
+        matrix matrix = read_matrix(file_name);
+        while (true) {
+
+            System.out.println("what do you want to do?(Enter a number)\n1.insert\n2.delete\n3.search\n4.update\n5.show 2d\n6.show zip\n7.save\n8.exit");
+            switch (sc.nextInt()) {
+                case 1:
+                    System.out.println("Enter row,col and value of element");
+                    matrix.insert(sc.nextInt(), sc.nextInt(), sc.nextInt());
+                    break;
+                case 2:
+                    System.out.println("Enter row and col of element");
+                    matrix.delete(sc.nextInt(), sc.nextInt());
+                    break;
+                case 3:
+                    System.out.println("Enter value of element");
+                    matrix.search(sc.nextInt());
+                    break;
+                case 4:
+                    System.out.println("Enter row,col and value of element");
+                    matrix.update(sc.nextInt(), sc.nextInt(), sc.nextInt());
+                    break;
+                case 5:
+                    matrix.show_2d();
+                    break;
+                case 6:
+                    matrix.show_zip();
+                case 7:
+                    matrix.save();
+                case 8:
+                    p = 1;
+                    break;
+
+            }
+            if (p == 1)
+                break;
+        }
 
     }
 
-    static matrix read_matrix() throws IOException {
-        FileReader fin = new FileReader("M(300,200).csv");
+    static matrix read_matrix(String file_name) throws IOException {
+        FileReader fin = new FileReader(file_name);
         Scanner sc = new Scanner(fin);
         ArrayList<node> nodes = new ArrayList<node>();
         node node2 = null;
@@ -54,7 +90,6 @@ public class Main {
         return new matrix(nodes, nodes.size(), o);
     }
 
-
 }
 
 
@@ -72,11 +107,28 @@ class node {
 class matrix {
     ArrayList<node> nodes;
     int row, col;
+    int[][] matrix;
 
     public matrix(ArrayList<node> nodes, int row, int col) {
         this.nodes = nodes;
         this.row = row;
         this.col = col;
+
+        int[][] matrix = new int[row][col];
+        node a;
+        for (int i = 0; i < row; i++) {
+            a = nodes.get(i);
+            for (int j = 0; j < col; j++) {
+                if (a.index == j) {
+                    matrix[i][j] = a.value;
+                    if (a.pointer != null)
+                        a = a.pointer;
+                } else
+                    matrix[i][j] = 0;
+            }
+
+        }
+        this.matrix = matrix;
     }
 
     void insert(int row, int col, int value) {
@@ -122,7 +174,6 @@ class matrix {
                     node1.pointer = null;
                     break;
                 }
-
                 node1 = node2;
                 node2 = node2.pointer;
             }
@@ -162,22 +213,28 @@ class matrix {
     }
 
     void show_2d() {
-        int[][] matrix = new int[row][col];
         node a;
         for (int i = 0; i < row; i++) {
             a = nodes.get(i);
             for (int j = 0; j < col; j++) {
                 if (a.index == j) {
                     matrix[i][j] = a.value;
-                    System.out.print(a.value+",");
                     if (a.pointer != null)
                         a = a.pointer;
                 } else
                     matrix[i][j] = 0;
-                System.out.print(0 + ",");
             }
+        }
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++)
+                if (j == 0)
+                    System.out.print(matrix[i][j]);
+                else
+                    System.out.print("," + matrix[i][j]);
+
             System.out.println();
         }
+
 
     }
 
@@ -195,4 +252,20 @@ class matrix {
         }
     }
 
+    void save() throws IOException {
+        FileWriter fw = new FileWriter("matrix.txt");
+        CSVWriter writer = new CSVWriter(fw);
+        String[] inf = new String[col];
+        ArrayList<String[]> f = new ArrayList<>();
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++)
+                inf[j] = String.valueOf(matrix[i][j]);
+            f.add(inf);
+            inf = new String[col];
+        }
+
+        writer.writeAll(f);
+        writer.close();
+        fw.close();
+    }
 }
