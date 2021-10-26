@@ -13,83 +13,124 @@ public class Main {
         System.out.println("Enter file name:");
         String file_name = sc.next();
         matrix matrix = read_matrix(file_name);
-        while (true) {
+        do {
 
             System.out.println("what do you want to do?(Enter a number)\n1.insert\n2.delete\n3.search\n4.update\n5.show 2d\n6.show zip\n7.save\n8.exit");
             switch (sc.nextInt()) {
-                case 1:
+                case 1 -> {
                     System.out.println("Enter row,col and value of element");
                     matrix.insert(sc.nextInt(), sc.nextInt(), sc.nextInt());
-                    break;
-                case 2:
+                }
+                case 2 -> {
                     System.out.println("Enter row and col of element");
                     matrix.delete(sc.nextInt(), sc.nextInt());
-                    break;
-                case 3:
+                }
+                case 3 -> {
                     System.out.println("Enter value of element");
                     matrix.search(sc.nextInt());
-                    break;
-                case 4:
+                }
+                case 4 -> {
                     System.out.println("Enter row,col and value of element");
                     matrix.update(sc.nextInt(), sc.nextInt(), sc.nextInt());
-                    break;
-                case 5:
-                    matrix.show_2d();
-                    break;
-                case 6:
-                    matrix.show_zip();
-                case 7:
-                    matrix.save();
-                case 8:
-                    p = 1;
-                    break;
-
+                }
+                case 5 -> matrix.show_2d();
+                case 6 -> matrix.show_zip();
+                case 7 -> matrix.save();
+                case 8 -> p = 1;
             }
-            if (p == 1)
-                break;
-        }
+        } while (p != 1);
 
     }
 
     static matrix read_matrix(String file_name) throws IOException {
         FileReader fin = new FileReader(file_name);
         Scanner sc = new Scanner(fin);
-        ArrayList<node> nodes = new ArrayList<node>();
+        ArrayList<node> row_nodes = new ArrayList();
+
         node node2 = null;
         int j = -1;
         int o = 0;
         while (sc.hasNext()) {
             String[] arr = sc.nextLine().split(",");
             o = arr.length;
-            if (j == nodes.size()) {
+            if (j == row_nodes.size()) {
                 node2 = new node(-2, -2, null);
-                nodes.add(node2);
+                row_nodes.add(node2);
             }
-            if (nodes.size() > 0)
+            if (row_nodes.size() > 0)
                 node2.pointer = null;
-            j = nodes.size();
+            j = row_nodes.size();
             for (int i = 0; i < arr.length; i++)
                 if (!arr[i].equals("0")) {
                     node node1 = new node(-1, -1, null);
                     node node = new node(i, Integer.parseInt(arr[i]), node1);
 
-                    if (nodes.size() > 0 && node2.pointer != null)
+                    if (row_nodes.size() > 0 && node2.pointer != null)
                         node2.pointer = node;
 
-                    if (nodes.size() > 0 && node2.pointer == null)
-                        nodes.add(node);
+                    if (row_nodes.size() > 0 && node2.pointer == null)
+                        row_nodes.add(node);
 
-                    if (nodes.size() == 0)
-                        nodes.add(node);
+                    if (row_nodes.size() == 0)
+                        row_nodes.add(node);
 
                     node2 = node;
                 }
         }
-        nodes.get(nodes.size() - 1).pointer = null;
+        row_nodes.get(row_nodes.size() - 1).pointer = null;
         fin.close();
-        return new matrix(nodes, nodes.size(), o);
+        //-------------------------------------------------------
+        FileReader fin2 = new FileReader(file_name);
+        Scanner sc2 = new Scanner(fin);
+        ArrayList<node> col_nodes = new ArrayList();
+        int[][] matrix = make_matrix(row_nodes, row_nodes.size(), o);
+        j = -1;
+        for (int i = 0; i < o; i++) {
+            if (j == col_nodes.size()) {
+                node2 = new node(-2, -2, null);
+                col_nodes.add(node2);
+            }
+            if (col_nodes.size() > 0)
+                node2.pointer = null;
+            j = col_nodes.size();
+            for (int u = 0; u < row_nodes.size(); u++) {
+                if (matrix[u][i] != 0) {
+                    node node1 = new node(-1, -1, null);
+                    node node = new node(u, matrix[u][i], node1);
+
+                    if (col_nodes.size() > 0 && node2.pointer != null)
+                        node2.pointer = node;
+
+                    if (col_nodes.size() > 0 && node2.pointer == null)
+                        col_nodes.add(node);
+
+                    if (col_nodes.size() == 0)
+                        col_nodes.add(node);
+                    node2 = node;
+                }
+            }
+        }
+        col_nodes.get(col_nodes.size() - 1).pointer = null;
+        fin2.close();
+        return new matrix(row_nodes, col_nodes, row_nodes.size(), o);
     }
 
+    static int[][] make_matrix(ArrayList<node> row_nodes, int row, int col) {
+        int[][] matrix = new int[row][col];
+        node a;
+        for (int i = 0; i < row; i++) {
+            a = row_nodes.get(i);
+            for (int j = 0; j < col; j++) {
+                if (a.index == j) {
+                    matrix[i][j] = a.value;
+                    if (a.pointer != null)
+                        a = a.pointer;
+                } else
+                    matrix[i][j] = 0;
+            }
+        }
+        return matrix;
+    }
 }
 
 
@@ -105,19 +146,20 @@ class node {
 }
 
 class matrix {
-    ArrayList<node> nodes;
+    ArrayList<node> row_nodes, col_nodes;
     int row, col;
     int[][] matrix;
 
-    public matrix(ArrayList<node> nodes, int row, int col) {
-        this.nodes = nodes;
+    public matrix(ArrayList<node> row_nodes, ArrayList<node> col_nodes, int row, int col) {
+        this.row_nodes = row_nodes;
+        this.col_nodes = col_nodes;
         this.row = row;
         this.col = col;
 
         int[][] matrix = new int[row][col];
         node a;
         for (int i = 0; i < row; i++) {
-            a = nodes.get(i);
+            a = row_nodes.get(i);
             for (int j = 0; j < col; j++) {
                 if (a.index == j) {
                     matrix[i][j] = a.value;
@@ -132,12 +174,22 @@ class matrix {
     }
 
     void insert(int row, int col, int value) {
-        node node1 = nodes.get(row);
-        node node2 = new node(col, value, node1.pointer);
+        node node1 = row_nodes.get(row);
         while (true) {
-            if (node1.pointer == null) {
-                nodes.remove(node1);
-                nodes.add(row, node2);
+            node node2 = new node(col, value, node1.pointer);
+            if (node1.index == -2) {
+                node1.value = node2.value;
+                node1.index = node2.index;
+                break;
+            }
+            if (node2.index > node1.index && node1.pointer == null) {
+                node1.pointer = node2;
+                break;
+            }
+            if (node2.index<node1.index) {
+                node2.pointer = node1;
+                row_nodes.remove(row_nodes.get(row));
+                row_nodes.add(row,node2);
                 break;
             }
             if (node1.pointer.index > col && node1.index < col) {
@@ -151,7 +203,7 @@ class matrix {
 
     void delete(int row, int col) {
         node node1 = null;
-        node node2 = nodes.get(row);
+        node node2 = row_nodes.get(row);
         boolean a = true;
         if (node2.pointer == null && node2.index == col) {
             node2.index = -2;
@@ -165,8 +217,8 @@ class matrix {
                         node1.pointer = node2.pointer;
                         break;
                     } else {
-                        nodes.add(row, node2.pointer);
-                        nodes.remove(node2);
+                        row_nodes.add(row, node2.pointer);
+                        row_nodes.remove(node2);
                         break;
                     }
                 }
@@ -181,7 +233,7 @@ class matrix {
 
     void search(int value) {
         boolean u = false;
-        for (node a : nodes) {
+        for (node a : row_nodes) {
             while (true) {
                 if (a.value == value) {
                     u = true;
@@ -202,7 +254,7 @@ class matrix {
     }
 
     void update(int row, int col, int value) {
-        node node1 = nodes.get(row);
+        node node1 = row_nodes.get(row);
         while (true) {
             if (node1.index == col) {
                 node1.value = value;
@@ -213,18 +265,8 @@ class matrix {
     }
 
     void show_2d() {
-        node a;
-        for (int i = 0; i < row; i++) {
-            a = nodes.get(i);
-            for (int j = 0; j < col; j++) {
-                if (a.index == j) {
-                    matrix[i][j] = a.value;
-                    if (a.pointer != null)
-                        a = a.pointer;
-                } else
-                    matrix[i][j] = 0;
-            }
-        }
+
+        matrix = Main.make_matrix(row_nodes, row, col);
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++)
                 if (j == 0)
@@ -240,7 +282,7 @@ class matrix {
 
     void show_zip() {
         int i = 0;
-        for (node a : nodes) {
+        for (node a : row_nodes) {
             while (true) {
                 if (a.index != -2)
                     System.out.println(i + " " + a.index + " " + a.value);
