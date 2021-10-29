@@ -14,7 +14,6 @@ public class Main {
         String file_name = sc.next();
         matrix matrix = read_matrix(file_name);
         do {
-
             System.out.println("what do you want to do?(Enter a number)\n1.insert\n2.delete\n3.search\n4.update\n5.show 2d\n6.show zip\n7.save\n8.exit");
             switch (sc.nextInt()) {
                 case 1 -> {
@@ -199,6 +198,33 @@ class matrix {
             node1 = node1.pointer;
         }
 
+        //-----------------------------------------------------
+
+        node1 = col_nodes.get(col);
+        while (true) {
+            node node2 = new node(row, value, node1.pointer);
+            if (node1.index == -2) {
+                node1.value = node2.value;
+                node1.index = node2.index;
+                break;
+            }
+            if (node2.index > node1.index && node1.pointer == null) {
+                node1.pointer = node2;
+                break;
+            }
+            if (node2.index<node1.index) {
+                node2.pointer = node1;
+                col_nodes.remove(col_nodes.get(col));
+                col_nodes.add(col,node2);
+                break;
+            }
+            if (node1.pointer.index > row && node1.index < row) {
+                node1.pointer = node2;
+                break;
+            }
+            node1 = node1.pointer;
+        }
+
     }
 
     void delete(int row, int col) {
@@ -215,12 +241,11 @@ class matrix {
                 if (node2.index == col && node2.pointer != null) {
                     if (node1 != null) {
                         node1.pointer = node2.pointer;
-                        break;
                     } else {
                         row_nodes.add(row, node2.pointer);
                         row_nodes.remove(node2);
-                        break;
                     }
+                    break;
                 }
                 if (node2.index == col && node2.pointer == null) {
                     node1.pointer = null;
@@ -229,6 +254,38 @@ class matrix {
                 node1 = node2;
                 node2 = node2.pointer;
             }
+
+//-----------------------------------------------------------------
+
+        node1 = null;
+        node2 = col_nodes.get(col);
+         a = true;
+        if (node2.pointer == null && node2.index == row) {
+            node2.index = -2;
+            node2.value = -2;
+            a = false;
+        }
+        if (a)
+            while (true) {
+                if (node2.index == row && node2.pointer != null) {
+                    if (node1 != null) {
+                        node1.pointer = node2.pointer;
+                    } else {
+                        col_nodes.add(col, node2.pointer);
+                        col_nodes.remove(node2);
+                    }
+                    break;
+                }
+                if (node2.index == row && node2.pointer == null) {
+                    node1.pointer = null;
+                    break;
+                }
+                node1 = node2;
+                node2 = node2.pointer;
+            }
+
+
+
     }
 
     void search(int value) {
@@ -257,6 +314,17 @@ class matrix {
         node node1 = row_nodes.get(row);
         while (true) {
             if (node1.index == col) {
+                node1.value = value;
+                break;
+            }
+            node1 = node1.pointer;
+        }
+
+        //---------------------------------------
+
+         node1 = col_nodes.get(col);
+        while (true) {
+            if (node1.index == row) {
                 node1.value = value;
                 break;
             }
